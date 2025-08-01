@@ -8,7 +8,7 @@ const books = [
         cover: "https://t9.baidu.com/it/u=471222987,938254&fm=217&app=126&size=re3,2&q=75&n=0&g=4n&f=JPEG&fmt=auto&maxorilen2heic=2000000?s=91915B925831328422BF43A003005026",
         description: "用细腻的笔触记录生活的点点滴滴，从日常琐事中发现美好，感悟时光流逝中的珍贵瞬间。每一个故事都是对生活的热爱与思考。",
         downloads: [
-            { name: "百度网盘", url: "#baidu1" },
+            { name: "百度网盘", url: "http://cn.chinadaily.com.cn/a/202407/24/WS66a0bc08a3107cd55d26c6c7.html" },
             { name: "阿里云盘", url: "#aliyun1" },
             { name: "蓝奏云", url: "#lanzou1" }
         ]
