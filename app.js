@@ -144,8 +144,21 @@ document.addEventListener('DOMContentLoaded', function() {
     // 搜索和筛选
     function filterBooks() {
         const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-        const activeCategory = document.querySelector('.filter-btn.active').dataset.category;
-        // const activeCategory = 'all'; 
+        
+        let activeCategory;
+        if (searchTerm === '') {
+        // 无搜索内容时，使用当前激活的类别
+        activeCategory = document.querySelector('.filter-btn.active').dataset.category;
+        } else {
+        // 有搜索内容时，强制在所有类别中搜索
+        activeCategory = 'all';
+        
+        // //消除掉原本的光标
+        // document.querySelector('.filter-btn.active').classList.remove('active');
+        // //并把光标切换到all上面
+        // document.querySelector('.filter-btn[data-category="all"]').classList.add('active');
+        //弹出提示窗 以提醒用户
+        }
         
         filteredBooks = allBooks.filter(book => {
             const matchesSearch = book.title.toLowerCase().includes(searchTerm) ||
