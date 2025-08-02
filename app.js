@@ -144,8 +144,14 @@ document.addEventListener('DOMContentLoaded', function() {
     // 搜索和筛选
     function filterBooks() {
         const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-        // const activeCategory = document.querySelector('.filter-btn.active').dataset.category;
-        const activeCategory = 'all'; 
+        // 
+        if (searchTerm === '') {
+            const activeCategory = document.querySelector('.filter-btn.active').dataset.category;
+        }
+        else{
+            const activeCategory = 'all'; 
+        }
+        
         
         filteredBooks = allBooks.filter(book => {
             const matchesSearch = book.title.toLowerCase().includes(searchTerm) ||
