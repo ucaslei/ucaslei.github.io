@@ -121,55 +121,173 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // 更新结果信息
-    function updateResultsInfo() {
-        const resultsCount = document.getElementById('resultsCount');
-        if (resultsCount) {
-            resultsCount.textContent = `共 ${filteredBooks.length} 本图书`;
-        }
+// 更新结果信息
+function updateResultsInfo() {
+    const resultsCount = document.getElementById('resultsCount');
+    if (resultsCount) {
+        resultsCount.textContent = `共 ${filteredBooks.length} 本图书`;
     }
+}
 
-    // 切换页码
-    window.changePage = function(page) {
-        const totalPages = Math.ceil(filteredBooks.length / booksPerPage);
-        if (page < 1 || page > totalPages) return;
-        
-        currentPage = page;
-        renderBooks();
-        
-        // 滚动到顶部
-        document.querySelector('header').scrollIntoView({ behavior: 'smooth' });
+// 切换页码
+window.changePage = function(page) {
+    const totalPages = Math.ceil(filteredBooks.length / booksPerPage);
+    if (page < 1 || page > totalPages) return;
+    
+    currentPage = page;
+    renderBooks();
+    
+    // 滚动到顶部
+    document.querySelector('header').scrollIntoView({ behavior: 'smooth' });
+}
+
+// 设置活跃类别按钮
+function setActiveCategory(category) {
+    // 移除所有按钮的活跃状态
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    
+    // 设置指定类别的按钮为活跃状态
+    const targetBtn = document.querySelector(`.filter-btn[data-category="${category}"]`);
+    if (targetBtn) {
+        targetBtn.classList.add('active');
     }
+}
 
-    // 搜索和筛选
-    function filterBooks() {
-        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-        
-        let activeCategory;
-        if (searchTerm === '') {
-        // 无搜索内容时，使用当前激活的类别
+// 显示自动关闭的提示框
+function showAutoCloseAlert(message, duration = 2000) {
+    // 创建自定义提示框
+    const alertBox = document.createElement('div');
+    alertBox.style.cssText = `
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #4CAF50;
+        color: white;
+        padding: 15px 25px;
+        border-radius: 5px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        z-index: 10000;
+        font-size: 16px;
+        transition: opacity 0.3s ease;
+    `;
+    alertBox.textContent = message;
+    
+    // 添加到页面
+    document.body.appendChild(alertBox);
+    
+    // 自动移除
+    setTimeout(() => {
+        alertBox.style.opacity = '0';
+        setTimeout(() => {
+            if (alertBox.parentNode) {
+                alertBox.parentNode.removeChild(alertBox);
+            }
+        }, 300);
+    }, duration);
+}
+
+// 执行搜索 - 主要的搜索函数
+window.performSearch = function() {
+    const searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
+    let activeCategory;
+    let shouldShowAlert = false;
+    let alertMessage = '';
+    
+    if (searchTerm === '') {
+        // 无搜索内容时，使用当前激活的类别按钮
         activeCategory = document.querySelector('.filter-btn.active').dataset.category;
-        } else {
-        // 有搜索内容时，强制在所有类别中搜索
-        activeCategory = 'all';
+    } else {
+        // 有搜索内容时，先在当前类别中搜索
+        activeCategory = document.querySelector('.filter-btn.active').dataset.category;
         
-        // //消除掉原本的光标
-        // document.querySelector('.filter-btn.active').classList.remove('active');
-        // //并把光标切换到all上面
-        // document.querySelector('.filter-btn[data-category="all"]').classList.add('active');
-        //弹出提示窗 以提醒用户
-        }
-        
-        filteredBooks = allBooks.filter(book => {
+        // 先在当前类别中搜索
+        let categoryResults = allBooks.filter(book => {
             const matchesSearch = book.title.toLowerCase().includes(searchTerm) ||
                                 book.author.toLowerCase().includes(searchTerm);
             const matchesCategory = activeCategory === 'all' || book.category === activeCategory;
-            
             return matchesSearch && matchesCategory;
         });
         
-        currentPage = 1;
-        renderBooks();
+        // 如果当前类别中没有结果，且不是在 'all' 类别中搜索
+        if (categoryResults.length === 0 && activeCategory !== 'all') {
+            // 在全局搜索
+            activeCategory = 'all';
+            setActiveCategory('all'); // 切换按钮到 all
+            shouldShowAlert = true;
+            
+            // 重新在全局搜索
+            categoryResults = allBooks.filter(book => {
+                return book.title.toLowerCase().includes(searchTerm) ||
+                       book.author.toLowerCase().includes(searchTerm);
+            });
+            
+            if (categoryResults.length > 0) {
+                alertMessage = `当前栏目无搜索结果，已在全局找到 ${categoryResults.length} 本关于"${searchTerm}"的图书。`;
+            } else {
+                alertMessage = `未找到关于"${searchTerm}"的任何图书。`;
+            }
+        } else if (categoryResults.length > 0) {
+            // 在当前类别中找到了结果
+            shouldShowAlert = true;
+            const categoryName = activeCategory === 'all' ? '全部' : 
+                               document.querySelector(`.filter-btn[data-category="${activeCategory}"]`)?.textContent || '当前栏目';
+            alertMessage = `在${categoryName}中找到 ${categoryResults.length} 本关于"${searchTerm}"的图书。`;
+        } else {
+            // 即使在全局也没有找到结果
+            shouldShowAlert = true;
+            alertMessage = `未找到关于"${searchTerm}"的任何图书。`;
+        }
+        
+        filteredBooks = categoryResults;
+    }
+    
+    // 如果没有搜索词，正常按类别过滤
+    if (searchTerm === '') {
+        filteredBooks = allBooks.filter(book => {
+            return activeCategory === 'all' || book.category === activeCategory;
+        });
+    }
+    
+    currentPage = 1;
+    renderBooks();
+    updateResultsInfo();
+    
+    // 显示提示信息
+    if (shouldShowAlert && alertMessage) {
+        showAutoCloseAlert(alertMessage);
+    }
+}
+
+// 类别过滤功能（如果你有类别按钮的话）
+window.filterByCategory = function(category) {
+    // 清空搜索框
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        searchInput.value = '';
+    }
+    
+    // 设置活跃按钮
+    setActiveCategory(category);
+    
+    // 过滤图书
+    filteredBooks = allBooks.filter(book => {
+        return category === 'all' || book.category === category;
+    });
+    
+    currentPage = 1;
+    renderBooks();
+    updateResultsInfo();
+}
+
+    // 类别筛选函数
+    function filterByCategory() {
+        // 清空搜索框
+        document.getElementById('searchInput').value = '';
+        // 执行搜索
+        performSearch();
     }
 
     // 更改每页显示数量
@@ -209,14 +327,21 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // 事件监听
-    document.getElementById('searchInput').addEventListener('input', filterBooks);
+    // 搜索框回车事件
+    document.getElementById('searchInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            performSearch();
+        }
+    });
+
     document.getElementById('perPageSelect').addEventListener('change', changePerPage);
     
+    // 类别筛选按钮事件
     document.querySelectorAll('.filter-btn').forEach(btn => {
         btn.addEventListener('click', function() {
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
             this.classList.add('active');
-            filterBooks();
+            filterByCategory();
         });
     });
 

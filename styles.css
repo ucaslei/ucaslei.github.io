@@ -62,16 +62,18 @@ h1 {
     font-weight: 400;
 }
 
-/* 搜索框样式 */
+/* 搜索框样式 - 修改为包含按钮的样式 */
 .search-container {
     position: relative;
     max-width: 600px;
     margin: 0 auto;
+    display: flex;
+    gap: 12px;
 }
 
 #searchInput {
-    width: 100%;
-    padding: 16px 60px 16px 24px;
+    flex: 1;
+    padding: 16px 24px;
     border: 2px solid #e5e7eb;
     border-radius: 50px;
     font-size: 16px;
@@ -97,6 +99,34 @@ h1 {
     top: 50%;
     transform: translateY(-50%);
     color: #6b7280;
+}
+
+/* 新增搜索按钮样式 */
+.search-button {
+    padding: 16px 32px;
+    background: linear-gradient(135deg, #3b82f6, #10b981);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    white-space: nowrap;
+}
+
+.search-button:hover {
+    background: linear-gradient(135deg, #2563eb, #059669);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.4);
+}
+
+.search-button:active {
+    transform: translateY(0);
 }
 
 /* 控制栏样式 */
@@ -372,6 +402,15 @@ footer {
 @media (max-width: 768px) {
     h1 {
         font-size: 2.2rem;
+    }
+    
+    /* 搜索框在移动端垂直排列 */
+    .search-container {
+        flex-direction: column;
+    }
+    
+    .search-button {
+        justify-content: center;
     }
     
     .books-grid {
