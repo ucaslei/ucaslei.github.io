@@ -2,77 +2,215 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>编程书籍分享</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/umd/lucide.min.js"></script>
-    <link rel="stylesheet" href="styles.css">
+    <!-- 百度禁止转码，保证移动端体验 -->
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- SEO TDK 核心优化区域 -->
+    <title>中小学电子教材课本免费下载_人教版小学初中高中电子课本PDF高清版-免费电子教材网</title>
+    <meta name="keywords" content="中小学电子教材,电子课本下载,人教版课本,小学教材PDF,初中课本,高中课本,免费电子书,课本下载,语文数学英语电子书,部编版教材">
+    <meta name="description" content="免费电子教材网提供最新中小学人教版、部编版、北师大版等各科电子课本免费下载服务。涵盖小学、初中、高中全年级语文、数学、英语、物理、化学、生物等学科，提供高清PDF电子版教材在线预览与免费下载，助力中小学生便捷学习。">
+    <meta name="robots" content="index, follow">
+    <!-- 请将 href 替换为你实际的网站链接 -->
+    <link rel="canonical" href="https://www.yourdomain.com/" />
+
+    <!-- 结构化数据 (Schema.org) 帮助搜索引擎理解网站内容 -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "免费电子教材网",
+      "url": "https://www.yourdomain.com/",
+      "description": "提供中小学电子教材课本免费下载，包括人教版、部编版等高清PDF。",
+      "keywords": "电子课本,教材下载,中小学教材"
+    }
+    </script>
+
+    <style>
+        :root {
+            --primary: #4a90e2;
+            --bg: #f5f7fa;
+            --card: #ffffff;
+            --text: #333;
+            --text-sub: #666;
+            --radius: 8px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; background: var(--bg); color: var(--text); padding: 20px; }
+
+        .container { max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; min-height: 90vh; }
+        
+        /* 头部与筛选区 */
+        header { text-align: center; margin-bottom: 20px; }
+        /* SEO: h1 样式保持与原 h2 一致，但权重更高 */
+        header h1 { font-size: 24px; color: #333; margin-bottom: 5px; }
+        header p { font-size: 14px; color: #666; margin-top: 5px; }
+
+        .filter-section { background: var(--card); padding: 15px; border-radius: var(--radius); box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        .filter-row { display: flex; align-items: flex-start; margin-bottom: 10px; }
+        .filter-row:last-child { margin-bottom: 0; }
+        .filter-label { font-weight: bold; width: 50px; flex-shrink: 0; padding-top: 5px; font-size: 14px; }
+        .filter-options { display: flex; flex-wrap: wrap; gap: 8px; }
+        
+        /* 使用 button 或 a 标签增强语义，这里保持 div 但通过 JS 控制 */
+        .filter-btn {
+            padding: 4px 12px; border: 1px solid #eee; background: #f9f9f9;
+            border-radius: 15px; cursor: pointer; color: var(--text-sub); font-size: 13px;
+            transition: all 0.2s;
+        }
+        .filter-btn:hover { border-color: var(--primary); color: var(--primary); }
+        .filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+        /* 书籍网格布局 */
+        .book-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            flex: 1; 
+        }
+
+        .book-card {
+            background: var(--card); border-radius: var(--radius); overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05); transition: transform 0.2s;
+            display: flex; flex-direction: column;
+            border: 1px solid #f0f0f0;
+        }
+        .book-card:hover { transform: translateY(-3px); box-shadow: 0 8px 16px rgba(0,0,0,0.1); border-color: var(--primary); }
+
+        .book-cover {
+            width: 100%;
+            aspect-ratio: 210 / 297; 
+            background: #eee; position: relative; overflow: hidden;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        /* SEO: img 增加 alt 属性样式支持（代码逻辑在JS中，但CSS需配合） */
+        .book-cover img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; }
+        .book-card:hover .book-cover img { transform: scale(1.05); }
+        .no-img { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #999; font-size: 12px; background: #fafafa; text-align: center; padding: 10px; }
+
+        .book-info { padding: 10px; flex: 1; display: flex; flex-direction: column; }
+        /* 使用 h3 作为书名标题，增强语义 */
+        .book-title { font-size: 15px; font-weight: bold; margin-bottom: 5px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; height: 40px; line-height: 20px; color: #333; text-decoration: none;}
+        .book-meta { font-size: 12px; color: var(--text-sub); margin-bottom: 4px; }
+        .book-publisher { font-size: 12px; color: #999; margin-bottom: 10px; margin-top: auto; }
+
+        .download-links { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-top: 8px; }
+        .dl-btn {
+            display: block; text-align: center; font-size: 12px; padding: 6px 0;
+            border-radius: 4px; text-decoration: none; color: white;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .dl-baidu { background: #06a7ff; }
+        .dl-quark { background: #1bd1a5; }
+        .dl-ali { background: #ff6a00; }
+        .dl-default { background: #909399; }
+
+        .pagination-wrapper { margin-top: 30px; display: flex; flex-direction: column; align-items: center; gap: 10px; padding-bottom: 20px; }
+        .pagination-info { font-size: 12px; color: #999; }
+        .pagination { display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; }
+        .page-btn {
+            min-width: 34px; height: 34px; display: flex; align-items: center; justify-content: center;
+            border: 1px solid #ddd; background: white; border-radius: 6px; cursor: pointer;
+            font-size: 14px; padding: 0 10px;
+        }
+        .page-btn:hover { border-color: var(--primary); color: var(--primary); }
+        .page-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+        .page-btn:disabled { background: #f5f5f5; color: #ccc; cursor: not-allowed; border-color: #eee; }
+
+        .empty-state { grid-column: 1 / -1; text-align: center; padding: 40px; color: #999; width: 100%; }
+
+        /* SEO 底部内容区样式 */
+        .seo-footer-content { margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee; color: #666; font-size: 14px; line-height: 1.8; }
+        .seo-footer-content h3 { font-size: 16px; color: #333; margin-bottom: 10px; }
+        .seo-footer-content p { margin-bottom: 15px; text-align: justify; }
+        .seo-tags { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+        .seo-tags span { background: #eee; padding: 2px 8px; border-radius: 4px; font-size: 12px; color: #666; }
+
+        /* 手机端适配 */
+        @media (max-width: 768px) {
+            body { padding: 10px; }
+            header h1 { font-size: 20px; }
+            .filter-section { padding: 10px; margin-bottom: 15px; }
+            .filter-label { width: 40px; font-size: 13px; }
+            .filter-btn { padding: 3px 10px; font-size: 12px; }
+            .book-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+            .book-title { font-size: 13px; height: 36px; line-height: 18px; }
+            .book-info { padding: 8px; }
+            .download-links { gap: 4px; }
+            .dl-btn { font-size: 11px; padding: 4px 0; }
+        }
+    </style>
 </head>
 <body>
-    <div class="background-pattern"></div>
-    
-    <div class="container">
-        <header>
-            <h1>编程书籍分享</h1>
-            <p class="subtitle">图书来源网络，仅供个人学习，下载后24小时删除</p>
-            
-            <div class="search-container">
-                <input type="text" id="searchInput" placeholder="搜索书名、作者...">
-                <button class="search-button" id="searchBtn" onclick="performSearch()">
-                    <i data-lucide="search" width="16" height="16"></i>
-                    搜索
-                </button>
-            </div>
-        </header>
 
-        <div class="controls">
-            <div class="filters">
-                <button class="filter-btn active" data-category="all">全部</button>
-                <button class="filter-btn" data-category="java">java</button>
-                <button class="filter-btn" data-category="前端">前端</button>
-                <button class="filter-btn" data-category="人工智能">人工智能</button>
-                <button class="filter-btn" data-category="C/C++">C/C++</button>
-                <button class="filter-btn" data-category="大数据">大数据</button>
-                <button class="filter-btn" data-category="计算机硬件">计算机硬件</button>
-                <button class="filter-btn" data-category="linux">linux</button>
-                <button class="filter-btn" data-category="python">python</button>
-                <button class="filter-btn" data-category="算法与程序设计">算法与程序设计</button>
-                <button class="filter-btn" data-category="数据库">数据库</button>
-                <button class="filter-btn" data-category="qt">qt</button>
-                <button class="filter-btn" data-category="其他">其他</button>
-            </div>
-            
-            <div class="results-info">
-                <span id="resultsCount">共 0 本图书</span>
-                <div class="per-page-selector">
-                    <select id="perPageSelect">
-                        <option value="8">每页 8 本</option>
-                        <option value="12" selected>每页 12 本</option>
-                        <option value="16">每页 16 本</option>
-                        <option value="20">每页 20 本</option>
-                    </select>
-                </div>
-            </div>
+<div class="container">
+    <!-- 语义化标签: header -->
+    <header>
+        <!-- SEO重点：H1标签必须包含核心关键词 -->
+        <h1>中小学电子教材课本免费下载</h1>
+        <p>提供人教版、部编版小学初中高中全学科PDF高清电子课本下载</p>
+    </header>
+
+    <!-- 语义化标签: nav/section -->
+    <section class="filter-section" aria-label="教材筛选">
+        <div class="filter-row">
+            <span class="filter-label">学段</span>
+            <div class="filter-options" id="school-filters"></div>
         </div>
-
-        <div class="books-grid" id="booksGrid">
-            <!-- 图书卡片将通过JavaScript动态生成 -->
+        <div class="filter-row">
+            <span class="filter-label">年级</span>
+            <div class="filter-options" id="grade-filters"></div>
         </div>
-
-        <div class="pagination" id="pagination">
-            <!-- 分页按钮将通过JavaScript动态生成 -->
+        <div class="filter-row">
+            <span class="filter-label">学科</span>
+            <div class="filter-options" id="subject-filters"></div>
         </div>
+    </section>
 
-        <div class="no-results" id="noResults" style="display: none;">
-            <h3>🔍 没有找到相关图书</h3>
-            <p>请尝试其他关键词或选择不同的分类</p>
+    <!-- 书籍列表区 -->
+    <main class="book-grid" id="book-list">
+        <!-- 内容由 JS 填充 -->
+    </main>
+
+    <!-- 针对爬虫的 Noscript 优化：当 JS 不执行时显示 -->
+    <noscript>
+        <div style="padding: 20px; text-align: center;">
+            <p>您的浏览器不支持 JavaScript，无法加载动态课本列表。</p>
+            <p>本站提供小学、初中、高中各年级人教版语文、数学、英语、物理、化学、生物、地理、历史、道德与法治等学科的电子课本PDF下载。</p>
         </div>
+    </noscript>
 
-        <footer>
-            <p>&copy; 共享图书 | 版权归作者所有，仅供个人学习</p>
-        </footer>
+    <!-- 分页区 -->
+    <div class="pagination-wrapper" id="pagination-container" style="display: none;">
+        <div class="pagination" id="pagination"></div>
+        <div class="pagination-info" id="page-info"></div>
     </div>
 
-    <script src="data.js"></script>
-    <script src="app.js"></script>
+    <!-- SEO 内容增强区域：增加关键词密度和相关性，帮助百度收录 -->
+    <footer class="seo-footer-content">
+        <h3>关于免费电子教材网</h3>
+        <p>
+            免费电子教材网致力于为广大学生、家长及教师提供最全、最新的中小学电子课本资源。我们整理了包括人教版（人民教育出版社）、北师大版、苏教版等主流版本的教材。
+            无论您是需要<strong>小学语文电子课本</strong>进行预习，还是需要<strong>初中数学复习资料</strong>，或者是<strong>高中英语必修教材</strong>的PDF版本，都可以在本站找到并免费下载。
+        </p>
+        <h3>热门下载分类</h3>
+        <div class="seo-tags">
+            <span>小学一年级语文</span>
+            <span>小学数学电子版</span>
+            <span>人教版英语单词</span>
+            <span>初二物理课本PDF</span>
+            <span>九年级化学教材</span>
+            <span>高中生物必修一</span>
+            <span>部编版历史电子书</span>
+        </div>
+        <p style="margin-top: 15px; font-size: 12px; color: #999; text-align: center;">
+            &copy; 2024 免费电子教材网 | 仅供学习交流使用，请支持正版教材
+        </p>
+    </footer>
+</div>
+
+<script src="books.js"></script>
 </body>
 </html>
