@@ -15,7 +15,7 @@
     <!-- 请将 href 替换为你实际的网站链接 -->
     <link rel="canonical" href="https://www.yourdomain.com/" />
 
-    <!-- 结构化数据 (Schema.org) 帮助搜索引擎理解网站内容 -->
+    <!-- 结构化数据 (Schema.org) -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -44,9 +44,45 @@
         
         /* 头部与筛选区 */
         header { text-align: center; margin-bottom: 20px; }
-        /* SEO: h1 样式保持与原 h2 一致，但权重更高 */
         header h1 { font-size: 24px; color: #333; margin-bottom: 5px; }
         header p { font-size: 14px; color: #666; margin-top: 5px; }
+
+/* ============ 广告位样式 Start ============ */
+        .ad-wrapper {
+            width: 100%;
+            margin-bottom: 20px; /* 广告下方间距 */
+            display: none; /* 默认隐藏，有图片时JS会显示 */
+        }
+        .ad-link {
+            display: block;
+            width: 100%;
+            /* 去掉 overflow: hidden，避免某些阴影被切掉，除非需要圆角裁切 */
+            border-radius: var(--radius); 
+            overflow: hidden; 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+            /* 确保容器本身没有高度限制 */
+            height: auto; 
+        }
+        .ad-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .ad-img {
+            width: 100%;       /* 宽度占满容器 */
+            height: auto;      /* 重点：高度自动，保持原图比例 */
+            display: block;    /* 去除底部留白 */
+            
+            /* 【已删除】 max-height: 120px;  <-- 删除这行，不再限制最大高度 */
+            /* 【已删除】 object-fit: cover;  <-- 删除这行，不再裁切图片 */
+        }
+        
+        /* 手机端如果觉得图片太高，可以单独限制，或者直接让它自适应 */
+        @media (max-width: 768px) {
+            /* 这里也不要限制高度，保证手机上也能显示全图 */
+            .ad-img { max-height: none; } 
+        }
+        /* ============ 广告位样式 End ============ */
 
         .filter-section { background: var(--card); padding: 15px; border-radius: var(--radius); box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin-bottom: 20px; }
         .filter-row { display: flex; align-items: flex-start; margin-bottom: 10px; }
@@ -54,7 +90,6 @@
         .filter-label { font-weight: bold; width: 50px; flex-shrink: 0; padding-top: 5px; font-size: 14px; }
         .filter-options { display: flex; flex-wrap: wrap; gap: 8px; }
         
-        /* 使用 button 或 a 标签增强语义，这里保持 div 但通过 JS 控制 */
         .filter-btn {
             padding: 4px 12px; border: 1px solid #eee; background: #f9f9f9;
             border-radius: 15px; cursor: pointer; color: var(--text-sub); font-size: 13px;
@@ -85,13 +120,11 @@
             background: #eee; position: relative; overflow: hidden;
             border-bottom: 1px solid #f0f0f0;
         }
-        /* SEO: img 增加 alt 属性样式支持（代码逻辑在JS中，但CSS需配合） */
         .book-cover img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; }
         .book-card:hover .book-cover img { transform: scale(1.05); }
         .no-img { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #999; font-size: 12px; background: #fafafa; text-align: center; padding: 10px; }
 
         .book-info { padding: 10px; flex: 1; display: flex; flex-direction: column; }
-        /* 使用 h3 作为书名标题，增强语义 */
         .book-title { font-size: 15px; font-weight: bold; margin-bottom: 5px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; height: 40px; line-height: 20px; color: #333; text-decoration: none;}
         .book-meta { font-size: 12px; color: var(--text-sub); margin-bottom: 4px; }
         .book-publisher { font-size: 12px; color: #999; margin-bottom: 10px; margin-top: auto; }
@@ -121,14 +154,12 @@
 
         .empty-state { grid-column: 1 / -1; text-align: center; padding: 40px; color: #999; width: 100%; }
 
-        /* SEO 底部内容区样式 */
         .seo-footer-content { margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee; color: #666; font-size: 14px; line-height: 1.8; }
         .seo-footer-content h3 { font-size: 16px; color: #333; margin-bottom: 10px; }
         .seo-footer-content p { margin-bottom: 15px; text-align: justify; }
         .seo-tags { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
         .seo-tags span { background: #eee; padding: 2px 8px; border-radius: 4px; font-size: 12px; color: #666; }
 
-        /* 手机端适配 */
         @media (max-width: 768px) {
             body { padding: 10px; }
             header h1 { font-size: 20px; }
@@ -146,14 +177,16 @@
 <body>
 
 <div class="container">
-    <!-- 语义化标签: header -->
     <header>
-        <!-- SEO重点：H1标签必须包含核心关键词 -->
         <h1>中小学电子教材课本免费下载</h1>
         <p>提供人教版、部编版小学初中高中全学科PDF高清电子课本下载</p>
     </header>
 
-    <!-- 语义化标签: nav/section -->
+    <!-- 【新增】广告位 1：上方 (Header下方，Filter上方) -->
+    <div id="ad-top" class="ad-wrapper">
+        <!-- JS会自动填充内容 -->
+    </div>
+
     <section class="filter-section" aria-label="教材筛选">
         <div class="filter-row">
             <span class="filter-label">学段</span>
@@ -169,12 +202,16 @@
         </div>
     </section>
 
+    <!-- 【新增】广告位 2：中间 (Filter下方，Book Grid上方) -->
+    <div id="ad-mid" class="ad-wrapper">
+        <!-- JS会自动填充内容 -->
+    </div>
+
     <!-- 书籍列表区 -->
     <main class="book-grid" id="book-list">
         <!-- 内容由 JS 填充 -->
     </main>
 
-    <!-- 针对爬虫的 Noscript 优化：当 JS 不执行时显示 -->
     <noscript>
         <div style="padding: 20px; text-align: center;">
             <p>您的浏览器不支持 JavaScript，无法加载动态课本列表。</p>
@@ -182,13 +219,11 @@
         </div>
     </noscript>
 
-    <!-- 分页区 -->
     <div class="pagination-wrapper" id="pagination-container" style="display: none;">
         <div class="pagination" id="pagination"></div>
         <div class="pagination-info" id="page-info"></div>
     </div>
 
-    <!-- SEO 内容增强区域：增加关键词密度和相关性，帮助百度收录 -->
     <footer class="seo-footer-content">
         <h3>关于免费电子教材网</h3>
         <p>
@@ -212,5 +247,56 @@
 </div>
 
 <script src="books.js"></script>
+
+<!-- 【新增】广告控制JS脚本 -->
+<script>
+    (function() {
+        // ============ 在这里配置你的广告 ============
+        const adConfig = {
+            // 上方广告配置
+            top: {
+                enable: true, // 是否开启
+                img: "https://backend.appmiaoda.com/projects/supabase258666947229560832/storage/v1/object/public/app_88o722bkeebl_images/a533462e-a3a0-43ab-ad21-ec482dc36574/1766656276284_nw8pzp.jpg", 
+                url: "https://h5.lot-ml.com/ProductEn/Index/512c4fe5a7de7709", // 点击跳转链接
+                alt: "Top Banner Ad"
+            },
+            // 中间广告配置
+            middle: {
+                enable: true, // 是否开启
+                img: "https://backend.appmiaoda.com/projects/supabase258666947229560832/storage/v1/object/public/app_88o722bkeebl_images/a533462e-a3a0-43ab-ad21-ec482dc36574/1766656276284_nw8pzp.jpg",
+                url: "https://h5.lot-ml.com/ProductEn/Index/512c4fe5a7de7709", // 点击跳转链接
+                alt: "Middle Banner Ad"
+            }
+        };
+
+        // ============ 下面是渲染逻辑，无需修改 ============
+        function renderAd(position, config) {
+            const container = document.getElementById(position === 'top' ? 'ad-top' : 'ad-mid');
+            if (!container || !config.enable || !config.img) return;
+
+            const link = document.createElement('a');
+            link.href = config.url;
+            link.target = "_blank"; // 新窗口打开
+            link.className = "ad-link";
+            link.rel = "nofollow sponsored"; // SEO优化：标记为广告
+
+            const img = document.createElement('img');
+            img.src = config.img;
+            img.alt = config.alt || "Advertisement";
+            img.className = "ad-img";
+
+            link.appendChild(img);
+            container.appendChild(link);
+            container.style.display = "block"; // 加载内容后显示容器
+        }
+
+        // 页面加载完成后渲染
+        document.addEventListener('DOMContentLoaded', function() {
+            renderAd('top', adConfig.top);
+            renderAd('middle', adConfig.middle);
+        });
+    })();
+</script>
+
 </body>
 </html>
